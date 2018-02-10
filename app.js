@@ -20,7 +20,8 @@ async function login(username, password) {
   }
 }
 
-async function checkAuthStatus(username, password) {
+async function checkAuthStatus(username, password, i, len) {
+  spinner.message(`Checking passwords (${i + 1}/${len})`);
   const response = await login(username, password);
   if (response.status === true) {
     spinner.stop();
@@ -34,7 +35,8 @@ async function checkAuthStatus(username, password) {
 }
 
 function sendRequests(username, passwords) {
-  return Promise.each(passwords, password => checkAuthStatus(username, password));
+  return Promise.each(passwords, (password, i) =>
+    checkAuthStatus(username, password, i, passwords.length));
 }
 
 async function main() {
